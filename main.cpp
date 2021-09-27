@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <iostream>
+using namespace std;
 
 double pi = 0;  // Variable que almacena el resultado final
 pthread_mutex_t mutex;  // Variable mutex que bloquea el uso de pi
@@ -15,11 +17,18 @@ pthread_mutex_t mutex;  // Variable mutex que bloquea el uso de pi
 void *series_pi(void *params);
 
 
-int main() {
+int main() {     
     pthread_t th[100];  // Declare the vector that contains all the threeads
 
+
+    //Inicializar variables
+    int numberOfThread;
+    //Pedir el numero de threads
+    cout << "Ingrese el numero de hilos que desea (del 1 al 100): " ;
+    cin >> numberOfThread;  
+
     // * Create all the threads
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < numberOfThread; i++)
     {
         // * Initialize the thread and search for errors
         if (pthread_create(&th[i], NULL, &series_pi, NULL) != 0) {

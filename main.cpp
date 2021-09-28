@@ -16,6 +16,8 @@ pthread_mutex_t mutex;  // Variable mutex que bloquea el uso de pi
  */
 void *series_pi(void *params);
 
+// definicion del bloqueo (uno por region critica)
+pthread_mutex_t lock;
 
 int main() {     
     pthread_t th[100];  // Declare the vector that contains all the threeads
@@ -27,14 +29,23 @@ int main() {
     cout << "Ingrese el numero de hilos que desea (del 1 al 100): " ;
     cin >> numberOfThread;  
 
+
     // * Create all the threads
     for (int i = 0; i < numberOfThread; i++)
     {
+
+         //Condicional por si incerta mal el hilo 
+        if (numberOfThread > 100){
+            pthread_mutex_lock(&lock);
+            cout << "[ERROR] Ingrese un valor de hilos validos (Entre 0 y 100)";
+        }
+
         // * Initialize the thread and search for errors
         if (pthread_create(&th[i], NULL, &series_pi, NULL) != 0) {
-            printf("[ERROR] - Creating threads");
+            printf("[ERROR] - Creando hilos");
         }
-        printf("Thread %d has started\n", i);
+        printf("Hilo %d ha comenzado\n", i);   
+            
     }
 
     // * Wait for all the threads to finish
@@ -44,7 +55,7 @@ int main() {
     }
 
     // * Print the result
-    printf("[RESULT] The value of PI is: %d\n", pi);
+    printf("[RESULTADO] El valor de PI es: %d\n", pi);
 
 
 }

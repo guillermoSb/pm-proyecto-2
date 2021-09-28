@@ -30,36 +30,32 @@ int main() {
     cin >> numberOfThread;  
 
 
-    // * Create all the threads
-    for (int i = 0; i < numberOfThread; i++)
-    {
 
-         //Condicional por si incerta mal el hilo 
-        if (numberOfThread > 100){
-            pthread_mutex_lock(&lock);
-            cout << "[ERROR] Ingrese un valor de hilos validos (Entre 0 y 100)";
-        }
+     //Condicional por si incerta mal el hilo 
+    if (numberOfThread > 100 or numberOfThread<1){
 
-        // * Initialize the thread and search for errors
-        if (pthread_create(&th[i], NULL, &series_pi, NULL) != 0) {
-            printf("[ERROR] - Creando hilos");
+        cout << "[ERROR] Ingrese un valor de hilos validos (Entre 1 y 100)";
+    }else{
+              // * Create all the threads
+        for (int i = 0; i < numberOfThread; i++)
+        {
+
+            // * Initialize the thread and search for errors
+            if (pthread_create(&th[i], NULL, &series_pi, NULL) != 0) {
+                printf("[ERROR] - Creando hilos");
+            }
+            printf("Hilo %d ha comenzado\n", i);   
+                
         }
-        printf("Hilo %d ha comenzado\n", i);   
-            
+        // * Wait for all the threads to finish
+        for (int i = 0; i < 100; i++)
+        {
+            pthread_join(th[i], NULL);
+        }
+    
+        // * Print the result
+        printf("[RESULTADO] El valor de PI es: %d\n", pi);
     }
 
-    // * Wait for all the threads to finish
-    for (int i = 0; i < 100; i++)
-    {
-        pthread_join(th[i], NULL);
-    }
 
-    // * Print the result
-    printf("[RESULTADO] El valor de PI es: %d\n", pi);
-
-
-}
-
-void *series_pi(void *params) {
-    return 0;
 }

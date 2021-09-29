@@ -72,8 +72,8 @@ int main() {
 void* series_pi(void *params) {
     //bloqueo del mutex
     pthread_mutex_lock(&lock);
-    int i;
-    i= (int) params; 
+    long i;
+    i= (long) params; 
     //Proceso del metodo
     pi+=i;
 

@@ -44,7 +44,7 @@ int main() {
         {
 
             // * Initialize the thread and search for errors
-            if (pthread_create(&th[i], NULL, &series_pi, (void *) i) != 0) {
+            if (pthread_create(&th[i], NULL, &series_pi,NULL) != 0) {
                 printf("[ERROR] - Creando hilos");
             }
             printf("Hilo %d ha comenzado\n", i);   
@@ -72,12 +72,7 @@ int main() {
 void* series_pi(void *params) {
     //bloqueo del mutex
     pthread_mutex_lock(&lock);
-    long i;
-    i= (long) params; 
-    //Proceso del metodo
-    pi+=i;
-
-    //Desbloqueo del mutex
+    
     pthread_mutex_unlock(&lock);
     pthread_exit(0);
 }

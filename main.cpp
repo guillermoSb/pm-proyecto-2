@@ -7,7 +7,7 @@
 using namespace std;
 
 double pi = 0; // Variable que almacena el resultado final
-int stepForIntegral = 500000;
+int stepForIntegral = 500000;   // Número de divisiones por cada hilo
 int numberOfThread;
 pthread_mutex_t mutex; // Variable mutex que bloquea el uso de pi
 
@@ -46,7 +46,7 @@ int main()
     }
     else
     {
-        // * Create all the threads
+        // * Crear todos los threads
         for (int i = 0; i < numberOfThread; i++)
         {
 
@@ -57,15 +57,15 @@ int main()
             }
             printf("Hilo %d ha comenzado\n", i);
         }
-        // * Wait for all the threads to finish
+        // * Esperar a que los threads teerminen
         for (int i = 0; i < numberOfThread; i++)
         {
-
             pthread_join(th[i], NULL);
         }
+        // * Destruir variable mutex
         pthread_mutex_destroy(&lock);
         pi *= 4;
-        // * Print the result
+        // * Imprimir resultado
         printf("[RESULTADO] El valor de PI es: %f\n", pi);
     }
     return 0;
@@ -73,18 +73,21 @@ int main()
 
 void *series_pi(void *params)
 {
+    double h = 1.0 / numberOfThread; // Paso por cada iteracion
+    int i = (int)params; // Id del thread
+    double m = i * h; // Guarda el valor en el eje x para la funcion
+    double k = (i + 1) * h; // Limite del valor en el eje x
+    double step = (k - m) / (double)stepForIntegral; // salto por cada iteracion
     //bloqueo del mutex
-    double h = 1.0 / numberOfThread;
-    int i = (int)params;
-    double m = i * h;
-    double k = (i + 1) * h;
-    double step = (k - m) / (double)stepForIntegral;
     pthread_mutex_lock(&lock);
     for (int j = 0; j < stepForIntegral; j++)
     {
+        // calcular el valor de pi
         pi += (1/(1+ m*m)) * step;
+        // calcular el siguiente valor en el eje x
         m += (k - m) / (double)stepForIntegral;
     }
+    // Desbloquear mutex
     pthread_mutex_unlock(&lock);
     pthread_exit(0);
 }

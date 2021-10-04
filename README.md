@@ -7,7 +7,7 @@ Mariana David - 201055
 ```
 
 ## ```void ejecutar_programa() ```
-Para ejecujtar el progama se debe agragar el argumento `-pthread` al compilar.
+Para ejecutar el progama se debe agregar el argumento `-pthread` al compilar.
 Posteriormente ejecutar `./main`
 
 ## ```int introduccion()```
